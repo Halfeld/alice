@@ -10,7 +10,12 @@ import (
 )
 
 // AnalizeSentiment returns analyzes from the text
-func AnalizeSentiment(ctx context.Context, client *language.Client, text string) *languagepb.AnalyzeSentimentResponse {
+func AnalizeSentiment(text string) *languagepb.AnalyzeSentimentResponse {
+	ctx := context.Background()
+
+	client, err := language.NewClient(ctx)
+	helpers.ErrorHandler(err, "Failed to create client")
+
 	sentiment, err := client.AnalyzeSentiment(ctx, &languagepb.AnalyzeSentimentRequest{
 		Document: &languagepb.Document{
 			Source: &languagepb.Document_Content{
